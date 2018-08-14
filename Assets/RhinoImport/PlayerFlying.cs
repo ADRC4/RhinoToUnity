@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class PlayerFlying : MonoBehaviour
 {
-    [SerializeField] public GameObject _laserPrefab;
+    [SerializeField] GameObject _laserPrefab;
 
     AudioSource _audio;
     CharacterController _controller;
-    float lastShot = 0.0f;
-
+    float _lastShot = 0.0f;
     float _gravity;
 
     void Start()
@@ -68,7 +67,7 @@ public class PlayerFlying : MonoBehaviour
     {
         const float shootDelta = 0.15f;
 
-        if (Time.time < lastShot + shootDelta) return;
+        if (Time.time < _lastShot + shootDelta) return;
         bool fire = Input.GetAxisRaw("Fire") == 1.0f;
 
         if (fire)
@@ -80,7 +79,7 @@ public class PlayerFlying : MonoBehaviour
                 transform.position + transform.rotation * _laserPrefab.transform.position,
                 transform.rotation * _laserPrefab.transform.rotation);
 
-            lastShot = Time.time;
+            _lastShot = Time.time;
         }
     }
 }
