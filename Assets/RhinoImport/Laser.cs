@@ -20,24 +20,19 @@ public class Laser : MonoBehaviour
         Destroy(gameObject, 60);
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.layer == 9)
+        if (other.gameObject.layer == 9)
         {
-            var rigidBody = collision.collider.GetComponent<Rigidbody>();
+            var rigidBody = other.GetComponent<Rigidbody>();
 
             if (rigidBody.isKinematic)
             {
                 rigidBody.isKinematic = false;
             }
 
-            Vector3 center = Vector3.zero;
-            foreach (var contact in collision.contacts)
-                center += contact.point;
-
-            center /= collision.contacts.Length;
-            rigidBody.AddForceAtPosition(transform.up * 2000.0f, center, ForceMode.Force);
-           // collision.collider.GetComponent<TileInstance>().Hit();
+            rigidBody.AddForceAtPosition(transform.up * 2000.0f, transform.position, ForceMode.Force);
+            other.GetComponent<TileInstance>().Hit(_color);
         }
 
         Destroy(gameObject);

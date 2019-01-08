@@ -16,7 +16,7 @@ public class EditorScript : MonoBehaviour
 
 public class RC4Window : EditorWindow
 {
-    string _fileName = @"C:\Users\vicen\OneDrive - University College London\RC4 2017\Students\M4G\export.xml";
+    string _fileName = @"C:\Users\vicen\Documents\Repositories\RhinoToUnity\Rhino files\export.xml";
     bool _addJoints = true;
     bool _makeKinematic = true;
 
@@ -56,7 +56,7 @@ public class Assembly
         {
             Tiles[i].CompactIndex = i;
             Tiles[i].MakeKinematic = makeKinematic;
-            Tiles[i].Furthest = Tiles[i].Faces.Select(f => f.sqrMagnitude).Max();
+            Tiles[i].Furthest = Tiles[i].Faces.Max(f => f.sqrMagnitude);
         }
 
         var anchor = new GameObject("Assembly").transform;
@@ -117,6 +117,7 @@ public class Assembly
                     joint.breakForce = BreakForce;
                     joint.breakTorque = BreakForce;
                     joint.enableCollision = false;
+                    joint.enablePreprocessing = false;
                     return;
                 }
             }
@@ -159,8 +160,8 @@ public class Tile
         rb.isKinematic = MakeKinematic;
         rb.centerOfMass = Centroid;
         rb.mass = Mass;
-        rb.drag = 1f;
-        rb.angularDrag = 1f;
+       // rb.drag = 1f;
+       // rb.angularDrag = 1f;
 
         foreach (var mesh in colliderMeshes)
         {
@@ -170,7 +171,6 @@ public class Tile
         }
 
         //var collider = go.AddComponent<BoxCollider>();
-
         _gameObject = go;
     }
 

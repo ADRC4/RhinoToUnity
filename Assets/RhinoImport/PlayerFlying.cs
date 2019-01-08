@@ -1,47 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerFlying : MonoBehaviour
 {
-    [SerializeField] GameObject _laserPrefab;
-
-    AudioSource _audio;
     CharacterController _controller;
-    float _lastShot = 0.0f;
-    float _gravity;
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        _audio = GetComponent<AudioSource>();
-        _controller = GetComponent<CharacterController>();
-        Physics.gravity = Vector3.zero;
-    }
-
-    private void OnGUI()
-    {
-        GUI.Label(new Rect(25, 24, 200, 40), $"Gravity: {_gravity:0.00}");
+       _controller = GetComponent<CharacterController>();
     }
 
     void Update()
     {
         Move();
-        Shoot();
-        SetGravity();
-    }
-
-    void SetGravity()
-    {
-        float increment = Input.GetAxisRaw("Mouse ScrollWheel");
-
-        if(increment != 0)
-        {
-            _gravity += increment;
-            Physics.gravity = Vector3.up * _gravity;
-        }
     }
 
     void Move()
@@ -61,25 +37,5 @@ public class PlayerFlying : MonoBehaviour
 
         transform.Rotate(Vector3.up, yaw, Space.World);
         transform.Rotate(Vector3.right, pitch, Space.Self);
-    }
-
-    void Shoot()
-    {
-        const float shootDelta = 0.15f;
-
-        if (Time.time < _lastShot + shootDelta) return;
-        bool fire = Input.GetAxisRaw("Fire") == 1.0f;
-
-        if (fire)
-        {
-            _audio.Play();
-
-            Instantiate(
-                _laserPrefab,
-                transform.position + transform.rotation * _laserPrefab.transform.position,
-                transform.rotation * _laserPrefab.transform.rotation);
-
-            _lastShot = Time.time;
-        }
     }
 }
